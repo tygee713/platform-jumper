@@ -2,23 +2,23 @@ import create from 'zustand'
 import { nanoid } from 'nanoid'
 
 export const useStore = create((set) => ({
-  color: 'blue',
-  tiles: [],
-  addTile: (x, y, z) => {
+  level: 1,
+  platforms: [],
+  addPlatform: (x, y, z) => {
     set((state) => ({
-      tiles: [
-        ...state.tiles,
+      platforms: [
+        ...state.platforms,
         {
           key: nanoid(),
           pos: [x, y, z],
-          color: state.color,
+          color: state.level === 1 ? 'blue' : 'red',
         },
       ]
     }))
   },
-  setColor: (color) => {
+  setLevel: (level) => {
     set(() => ({
-      color,
+      level,
     }))
   },
   reset: () => {},

@@ -1,7 +1,10 @@
+import React from 'react'
 import { Physics } from '@react-three/cannon'
 import { Sky } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { FPV } from './components/FPV'
+import { Player } from './components/Player'
+import { Platforms } from './components/Platforms'
 
 export default function App() {
   return (
@@ -11,6 +14,8 @@ export default function App() {
         <ambientLight intensity={0.5} />
         <FPV />
         <Physics>
+          <Player />
+          <Platforms />
         </Physics>
       </Canvas>
     </>
