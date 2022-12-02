@@ -13,7 +13,12 @@ export default function App() {
         <Sky sunPosition={[100,100,20]} />
         <ambientLight intensity={0.5} />
         <FPV />
-        <Physics>
+        <Physics
+        gravity={[0, -10, 0]}
+        tolerance={0}
+        iterations={50}
+        broadphase='SAP'
+      >
           <Player />
           <Platforms />
         </Physics>

@@ -18,6 +18,10 @@ export const Platforms = () => {
       addPlatform(0, 0, 6)
       addPlatform(3, 0, 3)
       addPlatform(6, 0, 6)
+      addPlatform(0, 0, -3)
+      addPlatform(0, 0, -6)
+      addPlatform(3, 0, -3)
+      addPlatform(6, 0, -6)
     }
   })
   return platforms.map(({ key, pos, color }) => <Platform key={key} position={pos} color={color} />)

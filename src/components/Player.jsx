@@ -6,7 +6,7 @@ import { Raycaster, Vector3 } from 'three'
 import { useKeyboard } from '../hooks/useKeyboard'
 
 const JUMP_FORCE = 5
-const SPEED = 300
+const SPEED = 5
 
 export const Player = () => {
   const { moveBackward, moveForward, moveLeft, moveRight, jump } = useKeyboard()
@@ -17,7 +17,7 @@ export const Player = () => {
     mass: 100,
     fixedRotation: true,
     position: [0, 1, 0],
-    args: 0.2,
+    args: [0.5],
     material: {
       friction: 0
     }
@@ -32,19 +32,18 @@ export const Player = () => {
     pos: [0, 0, 0],
     jumping: false
   })
-  const { vel, pos } = state.current
 
-  useEffect(() => player.velocity.subscribe((v) => vel = v), [player.velocity])
-s
+  useEffect(() => player.velocity.subscribe((v) => state.current.vel = v), [player.velocity])
+
   // The position of the player object, for use by the camera
   // This acts as an instance variable that will persist between re-renders
   // Gets set to the position of the sphere object after outside forces are applied
 
-  useEffect(() => player.position.subscribe((p) => pos = p), [player.position])
+  useEffect(() => player.position.subscribe((p) => state.current.pos = p), [player.position])
 
   // This runs every frame, so 60 times per second
   useFrame(() => {
-    camera.position.copy(new Vector3(pos[0], pos[1], pos[2]))
+    camera.position.set(state.current.pos[0], state.current.pos[1], state.current.pos[2])
 
     const direction = new Vector3()
     const frontVector = new Vector3(0, 0, (moveBackward ? 1 : 0) - (moveForward ? 1 : 0))
@@ -56,24 +55,24 @@ s
       .multiplyScalar(SPEED)
       .applyEuler(camera.rotation)
 
-    player.velocity.set(direction.x, vel[1], direction.z)
+    player.velocity.set(direction.x, state.current.vel[1], direction.z)
 
-    if (state.current.jumping && vel[1] < 0) {
+    if (state.current.jumping && state.current.vel[1] <= 0) {
       /** Ground check */
       const raycaster = new Raycaster(
-        player.position,
+        camera.position,
         new Vector3(0, -1, 0),
         0,
-        0.2
-      );
-      const intersects = raycaster.intersectObjects(scene.children);
+        1
+      )
+      const intersects = raycaster.intersectObjects(scene.children)
       if (intersects.length !== 0) {
         state.current.jumping = false
       }
     }
 
-    if (Math.abs(vel[1]) < 0.05 && !state.current.jumping && jump) {
-      player.velocity.set(vel[0], JUMP_FORCE, vel[2])
+    if (Math.abs(state.current.vel[1]) < 0.1 && !state.current.jumping && jump) {
+      player.velocity.set(state.current.vel[0], JUMP_FORCE, state.current.vel[2])
       state.current.jumping = true
     }
   })
