@@ -14,11 +14,11 @@ export default function App() {
         <ambientLight intensity={0.5} />
         <FPV />
         <Physics
-        gravity={[0, -10, 0]}
-        tolerance={0}
-        iterations={50}
-        broadphase='SAP'
-      >
+          gravity={[0, -10, 0]}
+          tolerance={0}
+          iterations={50}
+          broadphase='SAP'
+        >
           <Player />
           <Platforms />
         </Physics>

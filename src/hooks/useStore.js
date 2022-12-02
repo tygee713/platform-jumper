@@ -3,6 +3,7 @@ import { nanoid } from 'nanoid'
 
 export const useStore = create((set) => ({
   level: 1,
+  interval: 3,
   platforms: [],
   addPlatform: (x, y, z) => {
     set((state) => ({

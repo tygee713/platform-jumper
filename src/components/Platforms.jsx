@@ -12,16 +12,10 @@ export const Platforms = () => {
   useFrame(() => {
     if (!platforms.length) {
       addPlatform(0, 0, 0)
-      addPlatform(3, 0, 0)
-      addPlatform(6, 0, 0)
-      addPlatform(0, 0, 3)
-      addPlatform(0, 0, 6)
-      addPlatform(3, 0, 3)
-      addPlatform(6, 0, 6)
-      addPlatform(0, 0, -3)
-      addPlatform(0, 0, -6)
-      addPlatform(3, 0, -3)
-      addPlatform(6, 0, -6)
+      addPlatform(4, 0, 0)
+      addPlatform(0, 0, 4)
+      addPlatform(-4, 0, 0)
+      addPlatform(0, 0, -4)
     }
   })
   return platforms.map(({ key, pos, color }) => <Platform key={key} position={pos} color={color} />)

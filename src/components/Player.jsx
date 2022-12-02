@@ -2,10 +2,11 @@ import React from 'react'
 import { useSphere } from '@react-three/cannon'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useEffect, useRef } from 'react'
-import { Raycaster, Vector3 } from 'three'
+import { Color, Raycaster, Vector3 } from 'three'
 import { useKeyboard } from '../hooks/useKeyboard'
+import { useStore } from "../hooks/useStore"
 
-const JUMP_FORCE = 5
+const JUMP_FORCE = 4
 const SPEED = 5
 
 export const Player = () => {
@@ -23,9 +24,7 @@ export const Player = () => {
     }
   }))
 
-  // The velocity of the player object
-  // This acts as an instance variable that will persist between re-renders
-  // Gets set to the velocity of the sphere object according to outside forces
+  const [interval, addPlatform] = useStore((state) => [state.interval, state.addPlatform])
 
   const state = useRef({
     vel: [0, 0, 0],
@@ -33,12 +32,14 @@ export const Player = () => {
     jumping: false
   })
 
+  // The velocity of the player object
+  // This acts as an instance variable that will persist between re-renders
+  // Gets set to the velocity of the sphere object according to outside forces
   useEffect(() => player.velocity.subscribe((v) => state.current.vel = v), [player.velocity])
 
   // The position of the player object, for use by the camera
   // This acts as an instance variable that will persist between re-renders
   // Gets set to the position of the sphere object after outside forces are applied
-
   useEffect(() => player.position.subscribe((p) => state.current.pos = p), [player.position])
 
   // This runs every frame, so 60 times per second
@@ -68,6 +69,10 @@ export const Player = () => {
       const intersects = raycaster.intersectObjects(scene.children)
       if (intersects.length !== 0) {
         state.current.jumping = false
+        const intersect = intersects[intersects.length - 1]
+        intersect.object.material.color = new Color('yellow')
+        addPlatform(intersect.object.position.x + interval, intersect.object.position.y, intersect.object.position.z + Math.sign(intersect.object.position.z) * interval)
+        addPlatform(intersect.object.position.x - interval, intersect.object.position.y, intersect.object.position.z + Math.sign(intersect.object.position.z) * interval)
       }
     }
 
