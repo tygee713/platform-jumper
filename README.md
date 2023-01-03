@@ -1,1 +1,1 @@
-Simple 3d platforming with spawning tiles to learn React3Fiber
+Start of a 3d platformer project with spawning tiles to learn the basics of React3Fiber
